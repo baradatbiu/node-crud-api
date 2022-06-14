@@ -1,0 +1,19 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baradatbiu/node-crud-api.git"
+  },
+  "author": "Kharlamov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baradatbiu/node-crud-api/issues"
+  },
+  "homepage": "https://github.com/baradatbiu/node-crud-api#readme"
+}
