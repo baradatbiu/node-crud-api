@@ -4,10 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 export class Store {
   _users = [] as Users;
 
-  constructor(users: Users) {
-    this._users = users;
-  }
-
   getUsers() {
     return this._users;
   }
