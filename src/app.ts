@@ -4,7 +4,7 @@ import { Store } from "./store/Store.js";
 import { parseRoute } from "./utils/parseRoute.js";
 import { ERRORS, HTTP_STATUS_CODE, ROUTE } from "./types/User.js";
 
-const server = createServer();
+export const server = createServer();
 const store = new Store();
 
 server.on("request", async (req, res) => {
