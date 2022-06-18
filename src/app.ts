@@ -8,24 +8,17 @@ export const server = createServer();
 const store = new Store();
 
 server.on("request", async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-
-  req.on("error", () => {
-    res
-      .writeHead(HTTP_STATUS_CODE.INTERNAL_SERVER)
-      .end({ message: ERRORS.INTERNAL_SERVER });
-  });
-
-  const buffers = [];
-
-  for await (const chunk of req) {
-    buffers.push(chunk);
-  }
-
-  const body = Buffer.concat(buffers).toString();
-  const { method = "", url = "" } = req;
-
   try {
+    res.setHeader("Content-Type", "application/json");
+
+    const buffers = [];
+
+    for await (const chunk of req) {
+      buffers.push(chunk);
+    }
+    const body = Buffer.concat(buffers).toString();
+    const { method = "", url = "" } = req;
+
     const { name, userId } = parseRoute({ method, route: url });
 
     switch (name) {
@@ -77,13 +70,27 @@ server.on("request", async (req, res) => {
         throw new Error(ERRORS.INVALID_ROUTE);
     }
   } catch (error: any) {
-    if ([ERRORS.INVALID_PARAMS, ERRORS.INVALID_USER].includes(error.message)) {
-      res.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
-    } else {
-      res.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
+    let errorMessage = error.message;
+
+    switch (error.message) {
+      case ERRORS.INVALID_PARAMS:
+      case ERRORS.INVALID_USER:
+        res.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
+        break;
+      case ERRORS.INVALID_METHOD:
+      case ERRORS.INVALID_ROUTE:
+      case ERRORS.INVALID_ENDPOINT:
+      case ERRORS.USER_NOT_FOUND:
+        res.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
+        break;
+
+      default:
+        res.statusCode = HTTP_STATUS_CODE.INTERNAL_SERVER;
+        errorMessage = ERRORS.INTERNAL_SERVER;
+        break;
     }
 
-    res.end(JSON.stringify({ message: error.message }));
+    res.end(JSON.stringify({ message: errorMessage }));
   }
 });
 

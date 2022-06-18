@@ -22,8 +22,8 @@ export enum ERRORS {
   INVALID_ROUTE = "Invalid route",
   INVALID_PARAMS = "Invalid params",
   INVALID_ENDPOINT = "Invalid api endpoint",
-  USER_NOT_FOUND = "User not found",
   INVALID_USER = "User not valid",
+  USER_NOT_FOUND = "User not found",
   INTERNAL_SERVER = "Internal server error",
 }
 
