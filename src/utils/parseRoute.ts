@@ -1,4 +1,4 @@
-import { ERRORS, ROUTE, USERS_API_ENDPOINT } from "../types/User.js";
+import { ERRORS, ROUTE, USERS_API_ENDPOINT } from "../types/User";
 import { validate as uuidValidate } from "uuid";
 
 export const parseRoute = ({

@@ -11,8 +11,10 @@ export default {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
+        use: {
+          loader: "ts-loader",
+        },
+        exclude: [/node_modules/],
       },
     ],
   },
@@ -22,5 +24,6 @@ export default {
   output: {
     filename: "main.cjs",
     path: resolve(__dirname, "dist"),
+    clean: true,
   },
 };

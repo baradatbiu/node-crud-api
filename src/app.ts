@@ -1,8 +1,8 @@
-import "./env.js";
+import "./env";
 import { createServer } from "http";
-import { Store } from "./store/Store.js";
-import { parseRoute } from "./utils/parseRoute.js";
-import { ERRORS, HTTP_STATUS_CODE, ROUTE } from "./types/User.js";
+import { Store } from "./store/Store";
+import { parseRoute } from "./utils/parseRoute";
+import { ERRORS, HTTP_STATUS_CODE, ROUTE } from "./types/User";
 
 export const server = createServer();
 const store = new Store();
