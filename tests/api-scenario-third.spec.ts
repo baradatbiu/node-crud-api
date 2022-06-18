@@ -24,8 +24,8 @@ beforeAll(async () => {
   expect(body).toEqual<User>(checkUser);
 });
 
-afterAll(() => {
-  server.close();
+afterAll(async () => {
+  await server.close();
 });
 
 describe("Operations with non-existent user or invalid fields produce expected errors", () => {

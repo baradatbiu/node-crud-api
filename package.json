@@ -8,7 +8,7 @@
     "start:dev": "nodemon",
     "start:prod": "webpack && node ./dist/main.cjs",
     "lint:fix": "eslint --fix --cache",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",

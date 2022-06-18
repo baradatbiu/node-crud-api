@@ -10,8 +10,8 @@ import {
 
 const checkUser = { ...fakeUser } as User;
 
-afterAll(() => {
-  server.close();
+afterAll(async () => {
+  await server.close();
 });
 
 describe("Get all users, create, get, update, delete operations work correctly with the same user", () => {

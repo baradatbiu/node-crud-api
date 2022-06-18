@@ -13,8 +13,8 @@ beforeAll(() => {
   expect(validate(invalidUserId)).toBe(false);
 });
 
-afterAll(() => {
-  server.close();
+afterAll(async () => {
+  await server.close();
 });
 
 describe("All user APIs with a userId parameter validate it", () => {
