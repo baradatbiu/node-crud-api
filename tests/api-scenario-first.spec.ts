@@ -1,7 +1,12 @@
 import request from "supertest";
 import { server } from "../src/app.js";
 import { fakeUser } from "../src/fakeData.js";
-import { ERRORS, User } from "../src/types/User.js";
+import {
+  ERRORS,
+  HTTP_STATUS_CODE,
+  User,
+  USERS_API_ENDPOINT,
+} from "../src/types/User.js";
 
 const checkUser = { ...fakeUser } as User;
 
@@ -9,41 +14,41 @@ afterAll(() => {
   server.close();
 });
 
-describe("get all users and operations create, get, put, delete with one user", () => {
-  it("GET api/users, response with empty array", async () => {
+describe("Get all users, create, get, update, delete operations work correctly with the same user", () => {
+  it("GET api/users responds with an empty array", async () => {
     const { body, headers, statusCode } = await request(server)
-      .get("/api/users")
+      .get(USERS_API_ENDPOINT)
       .set("Content-Type", "application/json");
 
     expect(headers["content-type"]).toMatch(/json/);
-    expect(statusCode).toEqual(200);
+    expect(statusCode).toEqual(HTTP_STATUS_CODE.OK);
     expect(body).toEqual([]);
   });
 
-  it("POST api/users request, response with containing newly created record", async () => {
+  it("POST api/users responds with containing newly created record", async () => {
     const { body, headers, statusCode } = await request(server)
-      .post("/api/users")
+      .post(USERS_API_ENDPOINT)
       .send(checkUser)
       .set("Content-Type", "application/json");
 
     checkUser.id = body.id;
 
     expect(headers["content-type"]).toMatch(/json/);
-    expect(statusCode).toBe(201);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK_ADD);
     expect(body).toEqual<User>(checkUser);
   });
 
-  it("GET api/user/{userId} request, response with created record", async () => {
+  it("GET api/user/{userId} responds with created record", async () => {
     const { body, headers, statusCode } = await request(server)
       .get(`/api/users/${checkUser.id}`)
       .set("Content-Type", "application/json");
 
     expect(headers["content-type"]).toMatch(/json/);
-    expect(statusCode).toBe(200);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(body).toEqual<User>(checkUser);
   });
 
-  it("PUT api/users/{userId} request, response with updated record", async () => {
+  it("PUT api/users/{userId} responds with updated record", async () => {
     const updatedUser = {
       username: "Updated name",
       age: checkUser.age - 1,
@@ -51,31 +56,31 @@ describe("get all users and operations create, get, put, delete with one user", 
     };
 
     const { body, headers, statusCode } = await request(server)
-      .put(`/api/users/${checkUser.id}`)
+      .put(`${USERS_API_ENDPOINT}/${checkUser.id}`)
       .send(updatedUser)
       .set("Content-Type", "application/json");
 
     Object.assign(checkUser, body);
 
     expect(headers["content-type"]).toMatch(/json/);
-    expect(statusCode).toBe(200);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(body).toEqual<User>(checkUser);
   });
 
-  it("DELETE api/users/{userId} request, response with confirmation of successful deletion", async () => {
+  it("DELETE api/users/{userId} responds with confirmation of successful deletion", async () => {
     const { statusCode } = await request(server).delete(
-      `/api/users/${checkUser.id}`
+      `${USERS_API_ENDPOINT}/${checkUser.id}`
     );
 
-    expect(statusCode).toBe(204);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK_DELETE);
   });
 
-  it("GET api/user/{userId} request with deleted object id, expected answer is that there is no such object", async () => {
+  it("GET api/user/{userId} with deleted object id, expected answer is that there is no such object", async () => {
     const { body, statusCode } = await request(server).get(
-      `/api/users/${checkUser.id}`
+      `${USERS_API_ENDPOINT}/${checkUser.id}`
     );
 
-    expect(statusCode).toBe(404);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.NOT_FOUND);
     expect(body).toEqual({ message: ERRORS.USER_NOT_FOUND });
   });
 });
