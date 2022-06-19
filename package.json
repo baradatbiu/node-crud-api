@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon",
+    "start:multi": "nodemon --config nodemon-multi.json",
     "start:prod": "webpack && node ./dist/main.js",
     "lint:fix": "eslint --fix --cache",
     "test": "jest --verbose --maxWorkers=1"
