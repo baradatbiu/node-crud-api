@@ -12,6 +12,10 @@
 
     PORT=8000 or it can be changed in .env
 
+## Npm start multiple instances of your application using the Node.js Cluster
+
+npm run start:multi
+
 ## Build app in production mode(webpack/ts-loader) and run app
 
     npm run start:prod
