@@ -5,7 +5,6 @@ import { Store } from "./store/Store";
 import "./env";
 
 const PORT = Number(process.env.PORT) || 8000;
-const store = new Store();
 const numCPUs = cpus().length;
 
 if (cluster.isPrimary) {
@@ -27,6 +26,7 @@ if (cluster.isPrimary) {
     console.log(`worker ${worker.process.pid} died`);
   });
 } else {
+  const store = new Store(true);
   const apiServer = new APIServer(PORT, store);
 
   apiServer.init();

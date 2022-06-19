@@ -3,6 +3,17 @@ import { v4 as uuidv4 } from "uuid";
 
 export class Store {
   _users = [] as Users;
+  _isMulti = false;
+
+  constructor(multi = false) {
+    this._isMulti = multi;
+
+    if (multi) {
+      process.on("message", (message: string) => {
+        this._users = JSON.parse(message);
+      });
+    }
+  }
 
   getUsers() {
     return this._users;
@@ -17,13 +28,19 @@ export class Store {
 
     this._users.push(newUser);
 
+    if (this._isMulti) process?.send?.(JSON.stringify(this._users));
+
     return newUser;
   }
 
   updateUser({ user, userId }: { user: User; userId: User["id"] }) {
     const userToUpdate = this._users.find(({ id }) => id === userId);
 
-    if (userToUpdate) Object.assign(userToUpdate, user);
+    if (userToUpdate) {
+      Object.assign(userToUpdate, user);
+
+      if (this._isMulti) process?.send?.(JSON.stringify(this._users));
+    }
 
     return userToUpdate;
   }
@@ -34,6 +51,10 @@ export class Store {
     );
 
     this._users = this._users.filter(({ id }) => id !== userId);
+
+    if (this._isMulti && indexOfUserToDelete !== -1) {
+      process?.send?.(JSON.stringify(this._users));
+    }
 
     return indexOfUserToDelete !== -1;
   }
