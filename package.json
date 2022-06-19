@@ -2,11 +2,10 @@
   "name": "crud-api",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon",
-    "start:prod": "webpack && node ./dist/main.cjs",
+    "start:prod": "webpack && node ./dist/main.js",
     "lint:fix": "eslint --fix --cache",
     "test": "jest --verbose"
   },

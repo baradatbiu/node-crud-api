@@ -22,7 +22,7 @@ export default {
     extensions: [".ts", ".js"],
   },
   output: {
-    filename: "main.cjs",
+    filename: "main.js",
     path: resolve(__dirname, "dist"),
     clean: true,
   },
